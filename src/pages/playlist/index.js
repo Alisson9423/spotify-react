@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import PropTypes from 'prop-types';
 
 import { Creators as PlaylistDetailsActions } from '../../store/ducks/playlistDetail'
 import { Container, Header, SongList } from './styles';
@@ -86,6 +87,32 @@ function Playlist({ match, PlaylistsDetails, getPlayListDetailsRequest }) {
 				renderDetails()
 			)
 	);
+}
+
+
+Playlist.propTypes = {
+	match: PropTypes.shape({
+		params: PropTypes.shape({
+			id: PropTypes.number,
+		})
+	}).isRequired,
+
+	getPlayListDetailsRequest: PropTypes.func.isRequired,
+
+	playlistDetail: PropTypes.shape({
+		data: PropTypes.shape({
+			thumbnail: PropTypes.string,
+			title: PropTypes.string,
+			songs: PropTypes.arrayOf(PropTypes.shape({
+				id: PropTypes.number,
+				title: PropTypes.string,
+				author: PropTypes.string,
+				album: PropTypes.string
+			}))
+		}).isRequired,
+		loading: PropTypes.bool
+	}).isRequired,
+
 }
 
 const mapStateToProps = state => ({
