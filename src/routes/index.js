@@ -4,16 +4,13 @@ import Browser from "../pages/browse";
 import PlayList from '../pages/playlist'
 
 export default function Routes() {
-	
-	return (		
+	return (
 		<Switch>
 			<Route exact path="/">
 				<Browser />
 			</Route>
 
-			<Route path="/playlist/:id">
-				<PlayList />
-			</Route>
+			<Route path="/playlist/:id" component={PlayList} />
 		</Switch>
 	);
 }
