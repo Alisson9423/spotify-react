@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux'
+import  PropTypes from 'prop-types'
 
 import { Container } from './styles';
 import CloseIcon from '../../assets/images/close.svg'
@@ -20,4 +21,8 @@ export default function ErroBox() {
 			</Container>
 		)
 	);
+}
+
+ErroBox.prototype = {
+	hideError: PropTypes.func.isRequired,
 }

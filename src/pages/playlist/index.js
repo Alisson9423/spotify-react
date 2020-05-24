@@ -1,17 +1,21 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types';
 
 import { Creators as PlaylistDetailsActions } from '../../store/ducks/playlistDetail'
-import { Container, Header, SongList } from './styles';
+import { Creators as PlayerActions } from '../../store/ducks/player'
+
+import { Container, Header, SongList, SongItem } from './styles';
 import ClockIcon from '../../assets/images/clock.svg'
 import PlusIcon from '../../assets/images/plus.svg'
 import Loading from '../../components/Loading';
 
 
-function Playlist({ match, PlaylistsDetails, getPlayListDetailsRequest }) {
+function Playlist({ match, PlaylistsDetails, getPlayListDetailsRequest,loadSong, currentSong}) {
+
+	const [selected, setSelected] = useState(null)
 
 	useEffect(() => {
 		function loadPlaylistDetails() {
@@ -61,7 +65,14 @@ function Playlist({ match, PlaylistsDetails, getPlayListDetailsRequest }) {
 						) : (
 								playlist.songs.map(song => {
 									return (
-										<tr key={song.id}>
+										<SongItem 
+											key={song.id}
+											onClick={() => setSelected(song.id)}
+											onDoubleClick={() => loadSong(song)}
+											selected={selected === song.id}
+											playing={currentSong && currentSong.id === song.id}
+											>
+											
 											<td>
 												<img src={PlusIcon} alt="Adicionar" />
 											</td>
@@ -70,7 +81,7 @@ function Playlist({ match, PlaylistsDetails, getPlayListDetailsRequest }) {
 											<td>{song.author}</td>
 											<td>{song.album}</td>
 											<td>3:26</td>
-										</tr>
+										</SongItem>
 									)
 								})
 							)}
@@ -110,16 +121,22 @@ Playlist.propTypes = {
 				album: PropTypes.string
 			}))
 		}).isRequired,
-		loading: PropTypes.bool
+		loading: PropTypes.bool,
+		currentSong: PropTypes.shape({
+			id: PropTypes.number
+		}).isRequired
 	}).isRequired,
+
+	loadSong: PropTypes.func.isRequired
 
 }
 
 const mapStateToProps = state => ({
-	PlaylistsDetails: state.PlaylistsDetails
+	PlaylistsDetails: state.PlaylistsDetails,
+	currentSong: state.Player.currentSong,
 });
 
 const mapDispatchToProps = dispatch =>
-	bindActionCreators(PlaylistDetailsActions, dispatch);
+	bindActionCreators({...PlaylistDetailsActions, ...PlayerActions}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Playlist)

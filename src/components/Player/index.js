@@ -1,5 +1,8 @@
 import React from "react";
 import Slider from "rc-slider";
+import Sound from 'react-sound'
+import { useSelector } from 'react-redux'
+import PropTypes from 'prop-types';
 
 import {
 	Container,
@@ -18,17 +21,26 @@ import ForwardIcon from "../../assets/images/forward.svg";
 import RepeatIcon from "../../assets/images/repeat.svg";
 
 export default function Player() {
+	const { currentSong, status } = useSelector(state => state.Player)
+
 	return (
 		<Container>
+			{ !!currentSong &&  <Sound url={currentSong.file} playStatus={status}/>}
 			<Current>
-				<img
-					src="https://i.pinimg.com/originals/b4/75/00/b4750046d94fed05d00dd849aa5f0ab7.jpg"
-					alt="Cover"
-				/>
-				<div>
-					<span>Times like these</span>
-					<small>Foo Fighters</small>
-				</div>
+
+				{!!currentSong && (
+					<>
+						<img
+							src={currentSong.thumbnail}
+							alt={currentSong.title}
+						/>
+						<div>
+							<span>{currentSong.title}</span>
+							<small>{currentSong.author}</small>
+						</div>
+					</>
+				)}
+				
 			</Current>
 
 			<Progress>
@@ -82,4 +94,14 @@ export default function Player() {
 			</Volume>
 		</Container>
 	);
+}
+
+Player.propTypes = {
+	currentSong: PropTypes.shape({
+		file: PropTypes.string,
+		thumbnail: PropTypes.string,
+		author: PropTypes.string
+	}),
+
+	status: PropTypes.string
 }
