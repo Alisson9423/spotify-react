@@ -99,7 +99,7 @@ Playlist.propTypes = {
 
 	getPlayListDetailsRequest: PropTypes.func.isRequired,
 
-	playlistDetail: PropTypes.shape({
+	PlaylistsDetails: PropTypes.shape({
 		data: PropTypes.shape({
 			thumbnail: PropTypes.string,
 			title: PropTypes.string,
